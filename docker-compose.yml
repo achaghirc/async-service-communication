@@ -1,0 +1,22 @@
+##RabbitMQ docker-compose.yml
+
+version: '3.7'
+
+services:
+  
+  rabbitmq: 
+    image: "rabbitmq:3-management"
+    container_name: rabbitmq
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    networks:
+      - rabbitmq-net
+    environment:
+      RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
+      RABBITMQ_DEFAULT_USER: "root"
+      RABBITMQ_DEFAULT_PASS: "root"
+
+networks:
+  rabbitmq-net:
+    driver: bridge
