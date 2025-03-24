@@ -12,7 +12,7 @@ import java.util.UUID
 
 fun Route.apiControllerRoutes() {
 
-    post("/start-session") {
+    post("/api/v1/start-session") {
         val request = call.receive<StartSessionDTO>()
         if (!request.isValid()) {
             call.respond(HttpStatusCode.BadRequest, mapOf("error" to "Invalid parameters values on body request please check."))
@@ -34,7 +34,7 @@ fun Route.apiControllerRoutes() {
     }
 
     /// ONLY FOR TESTING PURPOSES
-    post("/callback-test"){
+    post("/api/v1/callback-test"){
         val request = call.receive<String>()
         println("Callback test: $request")
         call.respond(HttpStatusCode.OK, mapOf("message" to "Callback test: $request"))
