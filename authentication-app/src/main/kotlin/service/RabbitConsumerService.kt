@@ -1,6 +1,8 @@
 package com.tech.app.service
 
 import com.rabbitmq.client.*
+import com.tech.app.model.AuthenticateUserSessionDTO
+import kotlinx.serialization.json.Json
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -40,8 +42,10 @@ object RabbitConsumerService { // Singleton object
                     body: ByteArray?
                 ) {
                     body?.let {
-                        val message = String(it, Charsets.UTF_8)
+                        val message: AuthenticateUserSessionDTO = Json.decodeFromString<AuthenticateUserSessionDTO>(String(it, Charsets.UTF_8))
                         log.info("Message received from exchange [$EXCHANGE_NAME] with routing key [$ROUTING_KEY]: $message")
+
+                        AuthenticationService.authenticateUserSession(message)
                     }
                 }
             }

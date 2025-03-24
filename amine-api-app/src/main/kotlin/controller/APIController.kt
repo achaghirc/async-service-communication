@@ -19,17 +19,24 @@ fun Route.apiControllerRoutes() {
             return@post
         }
 
-        val sessionId = UUID.randomUUID().toString();
+        val sessionId = UUID.randomUUID().toString()
         val startSessionDTO = request.copy()
         val authenticateUserSession = AuthenticateUserSessionDTO(sessionId, startSessionDTO)
-        call.launch {
-            //Send the message to the RabbitMQ
-            RabbitPublisherService.sendMessage(authenticateUserSession)
-        }
 
         call.respond(HttpStatusCode.Accepted, mapOf(
             "status" to "accepted",
             "message" to "Request is being processed asynchronously. The result will be sent to the provided callback URL."))
 
+        call.launch {
+            //Send the message to the RabbitMQ
+            RabbitPublisherService.sendMessage(authenticateUserSession)
+        }
+    }
+
+    /// ONLY FOR TESTING PURPOSES
+    post("/callback-test"){
+        val request = call.receive<String>()
+        println("Callback test: $request")
+        call.respond(HttpStatusCode.OK, mapOf("message" to "Callback test: $request"))
     }
 }
