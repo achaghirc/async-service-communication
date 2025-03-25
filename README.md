@@ -47,10 +47,15 @@ The following diagram shows the architecture of the project:
 
 ![Architecture Diagram](./media/Asynchronous%20communication.png)
 
+## Sequence diagram
+
+The following diagram shows the sequence of the project:
+
+![Flow Diagram](./media/Sequence%20Diagram.png)
 
 ## How to test the project
 
-To test the project you can use the `Postman` collection available in the `postman` folder. The collection has one request for each scenario we want to test.:
+To test the project you can use the `Postman` collection available in the `postman` folder. The collection has one request for each scenario we want to test and you can import it in your `Postman` application.
 
 I also provide the `curl` commands to test the project:
 
@@ -154,7 +159,7 @@ Expected result:
 ```
 
 
-#### 4. (Invalid stationID) Start a session invalid stationID UUID value
+#### 5. (Invalid stationID) Start a session invalid stationID UUID value
 
 ```bash
 curl --location 'http://localhost:8080/api/v1/start-session' \
@@ -172,7 +177,7 @@ Expected result:
 }
 ```
 
-#### 5. (Invalid DriverId Token) Start a session invalid driverId token value
+#### 6. (Invalid DriverId Token) Start a session invalid driverId token value
 
 ```bash
 curl --location 'http://localhost:8080/api/v1/start-session' \
@@ -188,6 +193,36 @@ Expected result:
 ```json
 {
   "error": "Invalid parameters values on body request please check."
+}
+```
+
+#### 7. (Timeout) Start a stationID-driverId pair that will timeout
+
+```bash
+curl --location 'http://localhost:8080/api/v1/start-session' \
+--header 'Content-Type: application/json' \
+--data '{
+    "stationId": "550e8400-e29b-41d4-a716-446655440001",
+    "driverId": "UnknownDriver-._123456",
+    "callbackUrl": "http://localhost:8080/api/v1/callback-test"
+}'
+```
+
+Expected result:
+```json
+{
+   "status": "accepted",
+   "message": "Request is being processed asynchronously. The result will be sent to the provided callback URL."
+}
+```
+
+To the callback URL specified in the payload, the following response will be sent:
+
+```json
+{
+  "station_id": "550e8400-e29b-41d4-a716-446655440001",
+  "driver_token": "UnknownDriver-._123456",
+  "status": "unknown"
 }
 ```
 

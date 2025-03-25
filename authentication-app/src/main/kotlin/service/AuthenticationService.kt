@@ -4,6 +4,9 @@ import com.tech.app.model.AuthenticateResponseDTO
 import com.tech.app.model.AuthenticateUserSessionDTO
 import com.tech.app.model.StartSessionDTO
 import com.tech.app.model.enums.StatusEnum
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withTimeoutOrNull
 import kotlinx.serialization.json.Json
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -12,16 +15,41 @@ import java.net.URL
 
 var sessions = mapOf(
     "123e4567-e89b-12d3-a456-426614174000" to listOf("ValidDriver123456-._~", "ValidDriver654321-._~"),
-    "550e8400-e29b-41d4-a716-446655440000" to listOf("ValidDriver-._123456", "ValidDriver-._654321")
+    "550e8400-e29b-41d4-a716-446655440000" to listOf("ValidDriver-._123456", "ValidDriver-._654321"),
+    "550e8400-e29b-41d4-a716-446655440001" to listOf("UnknownDriver-._123456", "UnknownDriver-._654321")
 ) //stationId -> [driverToken1, driverToken2, ...]
 
 object AuthenticationService {
     private val log: Logger = LoggerFactory.getLogger(AuthenticationService::class.java)
 
     fun authenticateUserSession(authenticationSessionDTO: AuthenticateUserSessionDTO) {
-        var status = StatusEnum.NOT_ALLOWED
         val sessionId = authenticationSessionDTO.sessionId
         val startSession = authenticationSessionDTO.startSession
+        // Run heavy work with a timeout of 5 seconds for some specific station to simulate the timeout feature
+        val status: StatusEnum
+        if (startSession.stationId == "550e8400-e29b-41d4-a716-446655440001") {
+            log.info("Heavy work is needed for session $sessionId")
+             status = runBlocking {
+                withTimeoutOrNull(5000) {
+                    heavyWork()
+                    getStatusResponse(startSession)
+                } ?: StatusEnum.UNKNOWN // If timeout occurs, return UNKNOWN
+            }
+        } else {
+            status = getStatusResponse(startSession)
+        }
+        log.info("Session $sessionId status is $status")
+        sendDecisionToCallback(startSession, status)
+    }
+
+    private suspend fun heavyWork() {
+        log.info("Heavy work started")
+        delay(6000)
+        log.info("Heavy work finished")
+    }
+
+    private fun getStatusResponse(startSession: StartSessionDTO): StatusEnum {
+        var status = StatusEnum.NOT_ALLOWED
         val stationId = startSession.stationId
         if (sessions.containsKey(stationId)) {
             if (sessions[stationId]!!.contains(startSession.driverId)) {
@@ -30,8 +58,7 @@ object AuthenticationService {
         } else {
             status = StatusEnum.INVALID
         }
-        log.info("Session $sessionId status is $status")
-        sendDecisionToCallback(startSession, status)
+        return status
     }
 
     private fun sendDecisionToCallback(startSession: StartSessionDTO, status: StatusEnum) {
