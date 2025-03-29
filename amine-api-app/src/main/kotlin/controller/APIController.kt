@@ -18,15 +18,13 @@ fun Route.apiControllerRoutes(rabbitPublisherService: RabbitPublisherService) {
             call.respond(HttpStatusCode.BadRequest, mapOf("error" to "Invalid parameters values on body request please check."))
             return@post
         }
-
-        val sessionId = UUID.randomUUID().toString()
-        val startSessionDTO = request.copy()
-        val authenticateUserSession = AuthenticateUserSessionDTO(sessionId, startSessionDTO)
-
         call.respond(HttpStatusCode.Accepted, mapOf(
             "status" to "accepted",
             "message" to "Request is being processed asynchronously. The result will be sent to the provided callback URL."))
 
+        val sessionId = UUID.randomUUID().toString()
+        val startSessionDTO = request.copy()
+        val authenticateUserSession = AuthenticateUserSessionDTO(sessionId, startSessionDTO)
         call.launch {
             //Send the message to the RabbitMQ
             rabbitPublisherService.sendMessage(authenticateUserSession)

@@ -1,26 +1,40 @@
 # amine-api
 
-This project was created using the [Ktor Project Generator](https://start.ktor.io).
-
-Here are some useful links to get you started:
-
-- [Ktor Documentation](https://ktor.io/docs/home.html)
-- [Ktor GitHub page](https://github.com/ktorio/ktor)
-- The [Ktor Slack chat](https://app.slack.com/client/T09229ZC6/C0A974TJ9). You'll need to [request an invite](https://surveys.jetbrains.com/s3/kotlin-slack-sign-up) to join.
+This project is a small API that provides a simple endpoint to start a session. The API is built using [Ktor](https://ktor.io/), a Kotlin framework for building asynchronous servers and clients.
 
 ## Features
 
 Here's a list of features included in this project:
 
 | Name                                                                   | Description                                                                        |
-| ------------------------------------------------------------------------|------------------------------------------------------------------------------------ |
+|------------------------------------------------------------------------|------------------------------------------------------------------------------------ |
 | [Routing](https://start.ktor.io/p/routing)                             | Provides a structured routing DSL                                                  |
 | [Static Content](https://start.ktor.io/p/static-content)               | Serves static files from defined locations                                         |
 | [Content Negotiation](https://start.ktor.io/p/content-negotiation)     | Provides automatic content conversion according to Content-Type and Accept headers |
 | [kotlinx.serialization](https://start.ktor.io/p/kotlinx-serialization) | Handles JSON serialization using kotlinx.serialization library                     |
-
+| [ktor-server-rabbitmq](https://github.com/DamirDenis-Tudor/ktor-server-rabbitmq) | Handles JSON serialization using kotlinx.serialization library                     |
+| [koin-ktor](https://start.ktor.io/p/koin)                                        | Dependency injection using Koin library                     |
 ## Building & Running
 
+### Using Dockerfile
+
+To build and run the project using Docker, follow these steps:
+
+1. Build the Docker image:
+
+```bash
+
+./gradlew buildImage
+```
+
+2. Run the Docker container:
+
+```bash
+
+./gradlew runDocker
+```
+
+### Commands
 To build or run the project, use one of the following tasks:
 
 | Task                          | Description                                                          |
