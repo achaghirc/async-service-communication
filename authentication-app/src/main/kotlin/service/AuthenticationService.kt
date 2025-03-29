@@ -10,7 +10,9 @@ import kotlinx.coroutines.withTimeoutOrNull
 import kotlinx.serialization.json.Json
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.net.ConnectException
 import java.net.HttpURLConnection
+import java.net.SocketTimeoutException
 import java.net.URL
 
 var sessions = mapOf(
@@ -67,26 +69,34 @@ object AuthenticationService {
             log.error("Invalid start session")
             return
         }
-        val url = URL(startSession.callbackUrl)
-        val connection = url.openConnection() as HttpURLConnection
-        connection.requestMethod = "POST"
-        connection.setRequestProperty("Content-Type", "application/json")
-        connection.doOutput = true // to be able to write
+        try {
+            val url = URL(startSession.callbackUrl)
+            val connection = url.openConnection() as HttpURLConnection
+            connection.requestMethod = "POST"
+            connection.setRequestProperty("Content-Type", "application/json")
+            connection.doOutput = true // to be able to write
 
-        val callBody = AuthenticateResponseDTO(
-            stationId = startSession.stationId,
-            driverToken = startSession.driverId,
-            status = status
-        )
+            val callBody = AuthenticateResponseDTO(
+                stationId = startSession.stationId,
+                driverToken = startSession.driverId,
+                status = status
+            )
 
-        val requestBody = Json.encodeToString(callBody).toByteArray()
-        connection.outputStream.use { it.write(requestBody) }
+            val requestBody = Json.encodeToString(callBody).toByteArray()
+            connection.outputStream.use { it.write(requestBody) }
 
-        val responseCode = connection.responseCode
-        if (responseCode == 200) {
-            log.info("Decision sent to callbackUrl ${startSession.callbackUrl}")
-        } else {
-            log.error("Failed to send decision to callbackUrl ${startSession.callbackUrl}")
+            val responseCode = connection.responseCode
+            if (responseCode == 200) {
+                log.info("Decision sent to callbackUrl ${startSession.callbackUrl}")
+            } else {
+                log.error("Failed to send decision to callbackUrl ${startSession.callbackUrl}")
+            }
+        }catch (e: ConnectException) {
+            log.error("Connection refused: Unable to reach callbackUrl ${startSession.callbackUrl}",e)
+        } catch (e: SocketTimeoutException) {
+            log.error("Connection timeout: Unable to reach callbackUrl ${startSession.callbackUrl}",e)
+        } catch (e: Exception) {
+            log.error("Failed to send decision to callbackUrl ${startSession.callbackUrl}", e)
         }
     }
 

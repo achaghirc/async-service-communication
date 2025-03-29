@@ -21,6 +21,8 @@ repositories {
 
 dependencies {
 
+    implementation(libs.koin.ktor)
+    implementation(libs.koin.logger)
     implementation(libs.ktor.server.status.page)
     implementation(libs.ktor.server.rabbitmq)
     implementation(libs.ktor.server.core)
@@ -33,4 +35,3 @@ dependencies {
     testImplementation(libs.ktor.server.test.host)
     testImplementation(libs.kotlin.test.junit)
 }
-

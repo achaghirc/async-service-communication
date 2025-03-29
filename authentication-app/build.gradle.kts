@@ -22,6 +22,8 @@ repositories {
 
 dependencies {
 
+    implementation(libs.koin.ktor)
+    implementation(libs.koin.logger)
     implementation(libs.ktor.server.rabbitmq)
     implementation(libs.ktor.server.core)
     implementation(libs.ktor.server.host.common)

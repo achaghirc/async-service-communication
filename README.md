@@ -15,6 +15,18 @@ To run the project you need to have `docker` and `docker-compose` installed in y
     - Authentication Service: `http://localhost:8081`
     - RabbitMQ Management (Optional, not needed to interact with the console): `http://localhost:15672` (user: `root`, password: `root`)
 
+If something gets wrong with the docker compose in terms of the gradle build stage you can run the 
+following command to build the project and then run the docker compose:
+
+Where <strong>./build-project.sh</strong> is a script that will build the project and create the docker images for the services.
+
+```bash
+
+./build-project.sh
+docker-compose up
+```
+
+
 ## How to interact with the services
 
 The API service has only one endpoint `POST /api/v1/start-session` that receives a JSON payload with the following structure and starts the workflow:
@@ -57,6 +69,8 @@ The following diagram shows the sequence of the project:
 
 To test the project you can use the `Postman` collection available in the `postman` folder. The collection has one request for each scenario we want to test and you can import it in your `Postman` application.
 
+Just for test purposes, I added a callback URL to the API service that will receive the payload as the client would receive it, but feel free to change it to your own URL.
+
 I also provide the `curl` commands to test the project:
 
 #### 1. (Allowed Request) Start a session with an allowed driver-stationId pair
@@ -67,7 +81,7 @@ curl --location 'http://localhost:8080/api/v1/start-session' \
 --data '{
     "stationId": "550e8400-e29b-41d4-a716-446655440000",
     "driverId": "ValidDriver-._123456",
-    "callbackUrl": "http://localhost:8080/api/v1/callback-test"
+    "callbackUrl": "http://amine-api:8080/api/v1/callback-test"
 }'
 ```
 Expected result:
@@ -96,7 +110,7 @@ curl --location 'http://localhost:8080/api/v1/start-session' \
 --data '{
     "stationId": "550e8400-e29b-41d4-a716-446655440000",
     "driverId": "ValidDriver123456-._~",
-    "callbackUrl": "http://localhost:8080/api/v1/callback-test"
+    "callbackUrl": "http://amine-api:8080/api/v1/callback-test"
 }'
 ```
 
@@ -118,7 +132,7 @@ curl --location 'http://localhost:8080/api/v1/start-session' \
 --data '{
     "stationId": "550e8400-e29b-41d4-a716-446655440101",
     "driverId": "ValidDriver123456-._~",
-    "callbackUrl": "http://localhost:8080/api/v1/callback-test"
+    "callbackUrl": "http://amine-api:8080/api/v1/callback-test"
 }'
 ```
 Expected result:
@@ -147,7 +161,7 @@ curl --location 'http://localhost:8080/api/v1/start-session' \
 --data '{
     "stationId": "550e8400-e29b-41d4-a716-446655440000",
     "driverId": "ValidDriver-._123456",
-    "callbackUrl": "http://localhost:8080/api/v1/callback-test-malformed"
+    "callbackUrl": "http://amine-api:8080/api/v1/callback-test-malformed"
 }'
 ```
 Expected result:
@@ -167,7 +181,7 @@ curl --location 'http://localhost:8080/api/v1/start-session' \
 --data '{
     "stationId": "550e8400-e29b-41d4-a716-446655440000--",
     "driverId": "ValidDriver123456-._~",
-    "callbackUrl": "http://localhost:8080/api/v1/callback-test"
+    "callbackUrl": "http://amine-api:8080/api/v1/callback-test"
 }'
 ```
 Expected result:
@@ -185,7 +199,7 @@ curl --location 'http://localhost:8080/api/v1/start-session' \
 --data '{
     "stationId": "550e8400-e29b-41d4-a716-446655440000",
     "driverId": "ValidDriver123456-._~BADTOKEN&",
-    "callbackUrl": "http://localhost:8080/api/v1/callback-test"
+    "callbackUrl": "http://amine-api:8080/api/v1/callback-test"
 }'
 ```
 
@@ -204,7 +218,7 @@ curl --location 'http://localhost:8080/api/v1/start-session' \
 --data '{
     "stationId": "550e8400-e29b-41d4-a716-446655440001",
     "driverId": "UnknownDriver-._123456",
-    "callbackUrl": "http://localhost:8080/api/v1/callback-test"
+    "callbackUrl": "http://amine-api:8080/api/v1/callback-test"
 }'
 ```
 

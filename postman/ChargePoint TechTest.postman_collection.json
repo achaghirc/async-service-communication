@@ -1,0 +1,263 @@
+{
+	"info": {
+		"_postman_id": "a20ec8dd-1216-4460-ba29-dc33673ddbc6",
+		"name": "ChargePoint TechTest",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "11026541",
+		"_collection_link": "https://lunar-shuttle-200815.postman.co/workspace/API-Team-Workspace~deee72f8-76f7-475f-8b42-0ef156dfbf55/collection/11026541-a20ec8dd-1216-4460-ba29-dc33673ddbc6?action=share&source=collection_link&creator=11026541"
+	},
+	"item": [
+		{
+			"name": "1. Allowed Request",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"stationId\": \"550e8400-e29b-41d4-a716-446655440000\",\n    \"driverId\": \"ValidDriver-._123456\",\n    \"callbackUrl\": \"http://amine-api:8080/api/v1/callback-test\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/start-session",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"start-session"
+					]
+				},
+				"description": "Allowed Request. Start a session with an allowed driverId-stationId pair."
+			},
+			"response": []
+		},
+		{
+			"name": "2.Not Allowed Request",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"stationId\": \"550e8400-e29b-41d4-a716-446655440000\",\n    \"driverId\": \"ValidDriver123456-._~\",\n    \"callbackUrl\": \"http://amine-api:8080/api/v1/callback-test\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/start-session",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"start-session"
+					]
+				},
+				"description": "Not Allowed Request. Start a session with a not allowed driverId-stationId pair."
+			},
+			"response": []
+		},
+		{
+			"name": "3.Invalid Request",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"stationId\": \"550e8400-e29b-41d4-a716-446655440101\",\n    \"driverId\": \"ValidDriver123456-._~\",\n    \"callbackUrl\": \"http://amine-api:8080/api/v1/callback-test\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/start-session",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"start-session"
+					]
+				},
+				"description": "Invalid Request: Start a sessions with a stationId that that is not able to start sessions so the result is an invalid status."
+			},
+			"response": []
+		},
+		{
+			"name": "4. Bad URL",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"stationId\": \"550e8400-e29b-41d4-a716-446655440000\",\n    \"driverId\": \"ValidDriver-._123456\",\n    \"callbackUrl\": \"httpp://amine-api:8080/api/v1/callback-test-malformed\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/start-session",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"start-session"
+					]
+				},
+				"description": "Bad URL: Try to start session with an bad callback url."
+			},
+			"response": []
+		},
+		{
+			"name": "5. Invalid StationID",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"stationId\": \"550e8400-e29b-41d4-a716-446655440000--\",\n    \"driverId\": \"ValidDriver123456-._~\",\n    \"callbackUrl\": \"http://amine-api:8080/api/v1/callback-test\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/start-session",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"start-session"
+					]
+				},
+				"description": "Invalid StationId: This endpoint is used to start a new session by providing a non well formed UUID station ID, so the system responds with 400 bad request."
+			},
+			"response": []
+		},
+		{
+			"name": "6. Invalid DriverID Token",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"stationId\": \"550e8400-e29b-41d4-a716-446655440000\",\n    \"driverId\": \"ValidDriver123456-._~BADTOKEN&\",\n    \"callbackUrl\": \"http://amine-api:8080/api/v1/callback-test\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/start-session",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"start-session"
+					]
+				},
+				"description": "Invalid DriverId token: This endpoint is used to start a new session by providing a non valid driverId token, so the system responds with 400 bad request.\n\nDriverID token pattern: A string token of 20 to 80 characters in length. Allowed characters include:\n\n- Uppercase letters ( A-Z)\n    \n- Lowercase letters ( a-z)\n    \n- Digits ( 0-9)\n    \n- Hyphen (-), period (.), underscore (_), and tilde (\\~)."
+			},
+			"response": []
+		},
+		{
+			"name": "7. Timeout status",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"stationId\": \"550e8400-e29b-41d4-a716-446655440001\",\n    \"driverId\": \"UnknownDriver-._123456\",\n    \"callbackUrl\": \"http://amine-api:8080/api/v1/callback-test\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/start-session",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"start-session"
+					]
+				},
+				"description": "This endpoint simulate a Timeout that leads into a unknown status on the request sended to the callbackURL.\n\nThis is because for the syste the stationId specified on this request performs heavy work that throws a timeout."
+			},
+			"response": []
+		}
+	]
+}

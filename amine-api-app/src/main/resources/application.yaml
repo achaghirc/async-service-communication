@@ -7,3 +7,12 @@ ktor:
     development: true
     kafka:
         bootstrap-servers: "localhost:9092"
+rabbitmq:
+    host: localhost
+    port: 5672
+    user: root
+    pass: root
+    enabled: false # For building and testing purposes set to false
+    authenticateExchange: "chargepoint.authenticate_user.session"
+    authenticateQueue: "chargepoint.authenticate_user.session#authenticate-app"
+    routingKey: "chargepoint.authenticate_user.key"

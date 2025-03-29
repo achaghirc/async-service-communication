@@ -18,5 +18,5 @@ RUN gradle buildFatJar --no-daemon
 FROM amazoncorretto:21 as runtime
 EXPOSE 8080
 RUN mkdir /app
-COPY --from=build /home/gradle/src/build/libs/*.jar /app/amine-api.jar
-ENTRYPOINT ["java", "-jar", "/app/amine-api.jar"]
+COPY --from=build /home/gradle/src/build/libs/*.jar /app/authentication-app.jar
+ENTRYPOINT ["java", "-jar", "/app/authentication-app.jar"]

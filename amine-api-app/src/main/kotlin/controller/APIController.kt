@@ -10,7 +10,7 @@ import io.ktor.server.routing.*
 import kotlinx.coroutines.launch
 import java.util.UUID
 
-fun Route.apiControllerRoutes() {
+fun Route.apiControllerRoutes(rabbitPublisherService: RabbitPublisherService) {
 
     post("/api/v1/start-session") {
         val request = call.receive<StartSessionDTO>()
@@ -29,7 +29,7 @@ fun Route.apiControllerRoutes() {
 
         call.launch {
             //Send the message to the RabbitMQ
-            RabbitPublisherService.sendMessage(authenticateUserSession)
+            rabbitPublisherService.sendMessage(authenticateUserSession)
         }
     }
 
