@@ -57,13 +57,13 @@ To stop the project you can use the `docker-compose down` command in the root fo
 
 The following diagram shows the architecture of the project:
 
-![Architecture Diagram](./media/Asynchronous%20communication.png)
+![Architecture Diagram](resources/Asynchronous%20communication.png)
 
 ## Sequence diagram
 
 The following diagram shows the sequence of the project:
 
-![Flow Diagram](./media/Sequence%20Diagram.png)
+![Flow Diagram](resources/Sequence%20Diagram.png)
 
 ## How to test the project
 
