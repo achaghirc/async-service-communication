@@ -18,7 +18,7 @@ To run the project you need to have `docker` and `docker-compose` installed in y
 If something gets wrong with the docker compose in terms of the gradle build stage you can run the 
 following command to build the project and then run the docker compose:
 
-Where <strong>./build-project.sh</strong> is a script that will build the project and create the docker images for the services.
+Where <strong>./build-project.sh</strong> is a script that will build the project and create the build folder for the services.
 
 ```bash
 
