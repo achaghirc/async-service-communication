@@ -1,6 +1,6 @@
 # Asynchronous Service Communication
 
-This is a simple project to demostrate how to communicate between two services using asynchronous communication. The project is composed by two services: `Api service` and `Authentication service`. 
+This is a simple project to show how to communicate between two services using asynchronous communication. The project is composed by two services: `Api service` and `Authentication service`. 
 The `API Serveice` is responsible to receive an HTTP request, respond immediately with an ACK and send a message to `Authentication service`. 
 The `Authentication service` is responsible to authenticate the payload received from API service and send a response to a callback URL specified in the payload.
 
